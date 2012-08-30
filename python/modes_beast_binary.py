@@ -62,9 +62,9 @@ class modes_beast_binary:
 
   def parse(self, message):
     # Get a current timestamp. Hopefully in the future we'll have a real one even on rtl_sdr devices
-    now = "%.9f" % time.time()
+    now = "%.8f" % time.time()
     [secs, fracs] = now.split('.')
-    fakestamp = "%012x" % long(secs[:-5]+fracs)
+    fakestamp = "%012x" % long(secs[:-6]+fracs)
 
     #Parse it for type so we can output the correct message type
     [rawdata, ecc, reference, timestamp] = message.split()

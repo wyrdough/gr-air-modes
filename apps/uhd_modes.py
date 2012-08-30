@@ -163,6 +163,8 @@ if __name__ == '__main__':
                       help="open an SBS-1-compatible server on port 30003")
   parser.add_option("-w","--raw", action="store_true", default=False,
                       help="open a server outputting raw timestamped data on port 9988")
+  parser.add_option("-b","--beast", action="store_true", default=False,
+                      help="emulate Mode S Beast binary on port 9989")
   parser.add_option("-n","--no-print", action="store_true", default=False,
                       help="disable printing decoded packets to stdout")
   parser.add_option("-l","--location", type="string", default=None,
@@ -204,6 +206,11 @@ if __name__ == '__main__':
     sbs1rawport = air_modes.modes_output_sbs1_raw()
     outputs.append(sbs1rawport.output)
     updates.append(sbs1rawport.add_pending_conns)
+
+  if options.beast is True:
+    beastport = air_modes.modes_beast_binary()
+    outputs.append(beastport.output)
+    updates.append(beastport.add_pending_conns)
     
   if options.no_print is not True:
     outputs.append(air_modes.modes_output_print(my_position).parse)
@@ -238,7 +245,7 @@ if __name__ == '__main__':
       elif runner.done:
         raise KeyboardInterrupt
       else:
-        time.sleep(0.1)
+        time.sleep(0.001)
 
     except KeyboardInterrupt:
       fg.stop()

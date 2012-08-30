@@ -55,6 +55,7 @@ from modes_print import modes_output_print
 from modes_sql import modes_output_sql
 from modes_sbs1 import modes_output_sbs1
 from modes_sbs1_raw import modes_output_sbs1_raw
+from modes_beast_binary import modes_beast_binary
 from modes_kml import modes_kml
 from modes_raw_server import modes_raw_server
 from modes_exceptions import *

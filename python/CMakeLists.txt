@@ -42,6 +42,7 @@ GR_PYTHON_INSTALL(
     modes_raw_server.py
     modes_sbs1.py
     modes_sbs1_raw.py
+    modes_beast_binary.py
     modes_sql.py
     Quaternion.py
     DESTINATION ${GR_PYTHON_DIR}/air_modes
