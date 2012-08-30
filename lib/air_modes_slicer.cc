@@ -178,7 +178,11 @@ int air_modes_slicer::work(int noutput_items,
 		//crc for packets that aren't type 11 or type 17 is encoded with the transponder ID, which we don't know
 		//therefore we toss 'em if there's syndrome
 		//crc for the other short packets is usually nonzero, so they can't really be trusted that far
-		if(rx_packet.crc && (rx_packet.message_type == 11 || rx_packet.message_type == 17)) {continue;}
+
+    // Seems like if rx_packet.numlowconf is suitably low, you could assume the syndrome is the
+    // transponder id and make sure to check it later in the cases it can be checked
+
+		if(rx_packet.crc && (rx_packet.message_type == 11 || rx_packet.message_type == 17) && rx_packet.numlowconf > 0) {continue;}
 
 		d_payload.str("");
 		for(int m = 0; m < packet_length/8; m++) {
