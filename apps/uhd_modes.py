@@ -200,6 +200,10 @@ if __name__ == '__main__':
     sbs1port = air_modes.modes_output_sbs1(my_position)
     outputs.append(sbs1port.output)
     updates.append(sbs1port.add_pending_conns)
+
+    sbs1rawport = air_modes.modes_output_sbs1_raw()
+    outputs.append(sbs1rawport.output)
+    updates.append(sbs1rawport.add_pending_conns)
     
   if options.no_print is not True:
     outputs.append(air_modes.modes_output_print(my_position).parse)

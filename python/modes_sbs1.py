@@ -148,7 +148,7 @@ class modes_output_sbs1(modes_parse.modes_parse):
     [datestr, timestr] = self.current_time()
     [fs, dr, um, ident] = self.parse5(shortdata)
     aircraft_id = self.get_aircraft_id(ecc)
-    retstr = "MSG,6,0,%i,%06X,%i,%s,%s,%s,%s,,,,,,,,," % (aircraft_id, ecc, aircraft_id+100, datestr, timestr, datestr, timestr)
+    retstr = "MSG,6,0,%i,%06X,%i,%s,%s,%s,%s,,,,,,,,%04d," % (aircraft_id, ecc, aircraft_id+100, datestr, timestr, datestr, timestr, ident)
     return retstr + self.decode_fs(fs) + "\n"
 
   def pp11(self, shortdata, ecc):
@@ -189,6 +189,10 @@ class modes_output_sbs1(modes_parse.modes_parse):
         retstr = None
       else:
         retstr = "MSG,3,0,%i,%06X,%i,%s,%s,%s,%s,,%i,,,%.5f,%.5f,,,,0,0,0\n" % (aircraft_id, icao24, aircraft_id+100, datestr, timestr, datestr, timestr, altitude, decoded_lat, decoded_lon)
+
+    # FIXME: Surface position message
+    elif bdsreg == 0x08:
+        pass
 
     elif bdsreg == 0x09:
       # Airborne velocity measurements

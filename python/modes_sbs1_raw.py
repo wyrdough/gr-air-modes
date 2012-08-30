@@ -22,13 +22,12 @@
 
 import time, os, sys, socket
 from string import split, join
-from datetime import *
+#from datetime import *
 
-class modes_raw_server:
+class modes_output_sbs1_raw:
   def __init__(self):
     self._s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-    self._s.bind(('', 9988))
-#    self._s.bind(('', 30006))
+    self._s.bind(('', 30006))
     self._s.listen(1)
     self._s.setblocking(0) #nonblocking
     self._conns = [] #list of active connections
@@ -37,9 +36,10 @@ class modes_raw_server:
     self._s.close()
 
   def output(self, msg):
+    out = self.format_sbs1(msg)
     for conn in self._conns[:]: #iterate over a copy of the list
       try:
-        conn.send(msg)
+        conn.send(out)
       except socket.error:
         self._conns.remove(conn)
         print "Connections: ", len(self._conns)
@@ -51,3 +51,24 @@ class modes_raw_server:
       print "Connections: ", len(self._conns)
     except socket.error:
       pass
+
+  def format_sbs1(self, msg):
+    out = ""
+    fulltime = "%.9f" % time.time()
+    (sec, nsec) = fulltime.split('.')
+    ts = long(nsec) % 16777215
+   
+    hexts = "%06x" % ts 
+    hexlist = list(hexts)
+    reversehex = "%s%s%s%s%s%s" % (hexlist[4], hexlist[5], hexlist[2], hexlist[3], hexlist[0], hexlist[1])
+    ts = reversehex.upper()
+   
+    (payload, crc, level, notreallyatimestamp) = msg.split(" ") 
+ 
+    out = '$00'
+    out += ts
+    out += ':'
+    out += payload.upper()
+    out += ";\n"
+
+    return out
