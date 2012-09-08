@@ -177,7 +177,7 @@ class modes_output_print(modes_parse.modes_parse):
       retstr = "Type 17 BDS6,2 (emergency) from %x type %s" % (icao24, emerg_str)
       
     else:
-      retstr = "Type 17 bdsreg %x from %x not implemented" % (bdsreg, icao24)
+      retstr = "Type 17 subtype %i from %x not implemented" % (data["me"], icao24)
 
     return retstr
 
