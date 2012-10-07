@@ -245,7 +245,7 @@ if __name__ == '__main__':
       elif runner.done:
         raise KeyboardInterrupt
       else:
-        time.sleep(0.001)
+        time.sleep(0.0001)
 
     except KeyboardInterrupt:
       fg.stop()

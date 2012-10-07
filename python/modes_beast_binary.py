@@ -35,6 +35,9 @@ class modes_beast_binary:
     self._s.setblocking(0) #nonblocking
     self._conns = [] #list of active connections
 
+    self._time = time.time()
+    self._six = 0;
+
   def __del__(self):
     self._s.close()
 
@@ -62,9 +65,15 @@ class modes_beast_binary:
 
   def parse(self, message):
     # Get a current timestamp. Hopefully in the future we'll have a real one even on rtl_sdr devices
-    now = "%.8f" % time.time()
-    [secs, fracs] = now.split('.')
-    fakestamp = "%012x" % long(secs[:-6]+fracs)
+
+    # Ok, so get the time, subtract the stored time from it, multiply by a billion, divide by 62
+    # and increment the 6mhz counter by that result
+
+    now = time.time()
+    adj = round(((now - self._time) * 1000000000) / 62, 0)
+    self._six += adj
+    self._time = now
+    fakestamp = "%012x" % self._six
 
     #Parse it for type so we can output the correct message type
     [rawdata, ecc, reference, timestamp] = message.split()
@@ -86,7 +95,9 @@ class modes_beast_binary:
     hexout += fakestamp
     hexout += signal
     hexout += rawdata
-      
+    
+#    print "At %.9f TS now %d, delta %d (%d ns)" % (self._time, self._six, adj, adj * 62)
+  
     return self.HexToByte(hexout)
 
   def output(self, msg):
